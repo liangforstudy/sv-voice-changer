@@ -56,7 +56,9 @@ legacyForge {
 
 // No refmap: every mixin here targets Simple Voice Chat's own classes, and
 // Forge 1.20.1 runs with Mojang class names, so the names in the mixins are
-// already the ones at runtime. Only the config has to be announced.
+// the ones at runtime. The one exception, Simple Voice Chat's override of
+// Screen.init, keeps its SRG name and is listed by both names in
+// VoiceChatScreenMixin. Only the config has to be announced.
 mixin {
     config("sv-voice-changer.mixins.json")
 }

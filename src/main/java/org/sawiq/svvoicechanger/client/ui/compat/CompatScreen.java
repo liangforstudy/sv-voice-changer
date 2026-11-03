@@ -8,9 +8,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 /**
- * Screen base class for the AI voice screens, hiding the version-specific
- * render and key-event signatures behind three stable hooks. The studio
- * itself predates it and handles the versions inline.
+ * Screen base class for the studio and the AI voice screens, hiding the
+ * version-specific render and key-event signatures behind three stable hooks,
+ * and on 1.20.1 its single-axis scroll and self-drawn background.
  */
 public abstract class CompatScreen extends Screen {
     protected CompatScreen(Component title) {

@@ -16,7 +16,7 @@ import org.sawiq.svvoicechanger.protocol.VoiceChangerChannel;
  * mean is settled entirely by {@link org.sawiq.svvoicechanger.protocol.VoiceChangerCodec},
  * which is plain Java and can be tested without a game running. Keeping the
  * Minecraft-facing layer this thin is why the same wire format works unchanged
- * across every supported version and both loaders.</p>
+ * across every supported version and loader.</p>
  *
  * <p>Minecraft 1.20.1 predates typed payloads, so there the packet is just the
  * channel id plus the raw bytes; the bytes on the wire are identical.</p>

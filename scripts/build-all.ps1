@@ -31,4 +31,4 @@ foreach ($Target in @("1.20.1-fabric", "1.20.1-forge")) {
     }
 }
 
-Write-Host "All 14 release artifacts built successfully. The full 26-target matrix remains available for verification."
+Write-Host "All 14 release artifacts built successfully. The full 30-target matrix remains available for verification."

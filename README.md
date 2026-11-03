@@ -52,7 +52,7 @@ Use the Simple Voice Chat file made for your exact Minecraft version. The table 
 | 26.2 | 2.6.18 |
 | 26.3 | 2.6.23 |
 
-These minimums apply to both Fabric and NeoForge. Version 1.2.1 compiles on all 28 configured Fabric and NeoForge targets, and ships one jar per Minecraft range. Integrations fail open: if an optional SVC screen or HUD hook changes, the voice chat itself remains available.
+These minimums apply to every loader. The build compiles on all 30 configured Fabric, NeoForge and Forge targets, and ships one jar per Minecraft range. Integrations fail open: if an optional SVC screen or HUD hook changes, the voice chat itself remains available.
 
 ### 🎮 Getting started
 

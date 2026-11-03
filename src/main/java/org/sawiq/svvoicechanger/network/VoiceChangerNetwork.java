@@ -55,7 +55,8 @@ public final class VoiceChangerNetwork {
      */
     public static void initialize() {
         // Minecraft 26 renamed these two accessors; nothing else about the
-        // Fabric networking API moved.
+        // Fabric networking API moved between 1.21 and 26. 1.20.1 predates
+        // payload types altogether and only registers a receiver below.
         //? if fabric && >=1.21 && <26.1 {
         PayloadTypeRegistry.playS2C().register(VoiceChangerPayload.TYPE, VoiceChangerPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(VoiceChangerPayload.TYPE, VoiceChangerPayload.CODEC);

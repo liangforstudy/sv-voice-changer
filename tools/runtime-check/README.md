@@ -10,7 +10,7 @@ versions accept.
 This starts real clients instead. For each line of `cases.txt` it takes the jar
 from `dist/`, fetches the voice mod and Fabric API for that Minecraft version
 from Modrinth, and launches the game with a small probe mod. Fabric runs as a
-production client (intermediary names on 1.21.x, like a player's launcher);
+production client (intermediary names on 1.20.1 and 1.21.x, like a player's launcher);
 NeoForge uses Mojang's names in production anyway, so its dev client with the
 jars in `mods/` is the same thing. Minecraft Forge (1.20.1) runs under SRG
 names in production, so its dev client takes the jars as remapped mod
