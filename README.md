@@ -22,7 +22,7 @@ It is based on upstream version 1.3.0 and has every feature of that release. For
 
 ### On a server
 
-Not required: everything except the server settings works on your own client. To let a server allow or deny the voice changer, mute players and share voices, put the same jar and Simple Voice Chat (plus Fabric API on Fabric) in the server's `mods` folder. The commands and settings are described in the [upstream README](https://github.com/imsawiq/sv-voice-changer#%EF%B8%8F-for-server-operators).
+Not required: everything except the server settings works on your own client. To let a server allow or deny the voice changer, mute players and share voices, put the same jar and Simple Voice Chat (plus Fabric API on Fabric) in the server's `mods` folder. The commands and settings are described under "For server operators" in the [upstream README](https://github.com/imsawiq/sv-voice-changer#readme).
 
 ## Building
 
