@@ -11,6 +11,19 @@ It is based on upstream version 1.3.0 and has every feature of that release. For
 - Fabric: Fabric Loader and Fabric API
 - Forge: Forge 47 or later
 
+## Installing
+
+1. Download the jar for your loader from the [latest release](https://github.com/liangforstudy/sv-voice-changer/releases/latest):
+   - Fabric: `sv-voice-changer-fabric-1.3.0-1.20.1.jar`
+   - Forge: `sv-voice-changer-forge-1.3.0-1.20.1.jar`
+2. Download [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat/versions?g=1.20.1) for 1.20.1 and the same loader. On Fabric, also download [Fabric API](https://modrinth.com/mod/fabric-api/versions?g=1.20.1) for 1.20.1.
+3. Put the jars in the `mods` folder of your 1.20.1 Fabric or Forge instance and start the game.
+4. Open the Simple Voice Chat menu (`V` by default) and press the microphone button at the top to open the Voice Changer Studio. `J` turns the effect on and off.
+
+### On a server
+
+Not required: everything except the server settings works on your own client. To let a server allow or deny the voice changer, mute players and share voices, put the same jar and Simple Voice Chat (plus Fabric API on Fabric) in the server's `mods` folder. The commands and settings are described in the [upstream README](https://github.com/imsawiq/sv-voice-changer#%EF%B8%8F-for-server-operators).
+
 ## Building
 
 ```
