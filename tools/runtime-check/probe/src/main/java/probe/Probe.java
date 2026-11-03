@@ -37,6 +37,8 @@ public final class Probe {
     private volatile boolean finished;
     /** Zero until the first tick: the initial resource load can take longer than the limit. */
     private volatile long lastTickNanos;
+    /** Set while a call blocks the client thread on purpose, as 1.20.1's world loading does. */
+    static volatile boolean blockingLoad;
     private Screen lastScreen;
     private Runnable restoreMicrophone = () -> {
     };
@@ -69,6 +71,10 @@ public final class Probe {
                     return;
                 }
                 long lastTick = this.lastTickNanos;
+                if (blockingLoad) {
+                    this.lastTickNanos = System.nanoTime();
+                    continue;
+                }
                 if (lastTick != 0 && System.nanoTime() - lastTick > FROZEN_AFTER_NANOS) {
                     StringBuilder dump = new StringBuilder();
                     Thread.getAllStackTraces().forEach((thread, stack) -> {
@@ -148,7 +154,7 @@ public final class Probe {
 
         step("join the world", 4800, (mc, t) -> {
             if (t == 0) {
-                mc.createWorldOpenFlows().openWorld(WORLD, () -> fail(mc, "world '" + WORLD + "' refused to open", null));
+                Screens.openWorld(mc, WORLD, () -> fail(mc, "world '" + WORLD + "' refused to open", null));
             }
             if (Screens.current(mc) instanceof BackupConfirmScreen backupPrompt) {
                 skipBackup(backupPrompt);

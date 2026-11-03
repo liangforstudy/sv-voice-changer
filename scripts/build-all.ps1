@@ -23,4 +23,12 @@ foreach ($Version in $Versions) {
     }
 }
 
-Write-Host "All 10 release artifacts built successfully. The full 26-target matrix remains available for verification."
+# Minecraft 1.20.1 predates NeoForge, so its second loader is Minecraft Forge.
+foreach ($Target in @("1.20.1-fabric", "1.20.1-forge")) {
+    & (Join-Path $PSScriptRoot "build-version.ps1") $Target -NoClean:$NoClean
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
+}
+
+Write-Host "All 14 release artifacts built successfully. The full 26-target matrix remains available for verification."

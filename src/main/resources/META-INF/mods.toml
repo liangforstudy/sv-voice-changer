@@ -1,0 +1,33 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "CC-BY-NC-SA-4.0"
+
+[[mods]]
+modId = "${id}"
+displayName = "${name}"
+version = "${version}"
+authors = "sawiq_"
+description = "${description}"
+logoFile = "assets/sv-voice-changer/icon.png"
+displayURL = "https://github.com/imsawiq"
+
+[[dependencies.${id}]]
+modId = "forge"
+mandatory = true
+versionRange = "${forge}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${id}]]
+modId = "voicechat"
+mandatory = true
+versionRange = "${voicechat}"
+ordering = "AFTER"
+side = "BOTH"

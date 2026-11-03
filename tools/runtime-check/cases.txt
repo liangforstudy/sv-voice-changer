@@ -5,6 +5,7 @@
 # 1.21.8 build, and at 1.21.3 and 1.21.5, which only have older Simple
 # Voice Chat releases.
 
+fabric   1.20.1   dist/sv-voice-changer-fabric-*+1.20.1.jar
 fabric   1.21     dist/sv-voice-changer-fabric-*+1.21.8.jar
 fabric   1.21.5   dist/sv-voice-changer-fabric-*+1.21.8.jar
 fabric   1.21.6   dist/sv-voice-changer-fabric-*+1.21.8.jar
@@ -16,6 +17,8 @@ fabric   26.1     dist/sv-voice-changer-fabric-*+26.1.2.jar
 fabric   26.1.2   dist/sv-voice-changer-fabric-*+26.1.2.jar
 fabric   26.2     dist/sv-voice-changer-fabric-*+26.2.jar
 fabric   26.3     dist/sv-voice-changer-fabric-*+26.3.jar
+
+forge    1.20.1   dist/sv-voice-changer-forge-*+1.20.1.jar
 
 neoforge 1.21.1   dist/sv-voice-changer-neoforge-*+1.21.8.jar
 neoforge 1.21.3   dist/sv-voice-changer-neoforge-*+1.21.8.jar

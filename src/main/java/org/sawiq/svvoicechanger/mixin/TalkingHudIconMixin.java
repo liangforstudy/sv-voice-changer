@@ -7,6 +7,9 @@ import org.sawiq.svvoicechanger.client.VoiceChangerController;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+//? if forge {
+/*import org.spongepowered.asm.mixin.injection.ModifyArg;
+*///?}
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -42,6 +45,27 @@ public abstract class TalkingHudIconMixin {
     private static final String VOICE_CHANGER_MICROPHONE_TEXTURE =
             "textures/icons/micro.png";
 
+    //? if forge {
+    /*/^*
+     * Forge 1.20.1 ships a Mixin that cannot define the synthetic class
+     * {@code @ModifyArgs} generates, and fails Simple Voice Chat's client
+     * setup with it. {@code @ModifyArg} needs no such class.
+     ^/
+    @ModifyArg(
+            method = "onRenderHUD",
+            require = 0,
+            index = 1,
+            at = @At(
+                    value = "INVOKE",
+                    target = RENDER_ICON_TARGET
+            )
+    )
+    private net.minecraft.resources.ResourceLocation svvoicechanger$replaceTalkingIcon(
+            net.minecraft.resources.ResourceLocation icon) {
+        Object replacement = svvoicechanger$replacementFor(icon);
+        return replacement != null ? (net.minecraft.resources.ResourceLocation) replacement : icon;
+    }
+    *///?} else {
     @ModifyArgs(
             method = "onRenderHUD",
             require = 0,
@@ -51,12 +75,21 @@ public abstract class TalkingHudIconMixin {
             )
     )
     private void svvoicechanger$replaceTalkingIcon(Args arguments) {
+        Object replacement = svvoicechanger$replacementFor(arguments.get(1));
+        if (replacement != null) {
+            arguments.set(1, replacement);
+        }
+    }
+    //?}
+
+    /** @return the voice changer's icon in place of this one, or null to keep it */
+    @Unique
+    private static Object svvoicechanger$replacementFor(Object icon) {
         VoiceChangerController controller = VoiceChangerController.INSTANCE;
         if (!controller.isInitialized() || !controller.isEffectActive()) {
-            return;
+            return null;
         }
 
-        Object icon = arguments.get(1);
         String iconName = String.valueOf(icon);
         String replacementPath;
         if (VOICE_CHAT_MICROPHONE_SPRITE.equals(iconName)
@@ -66,15 +99,15 @@ public abstract class TalkingHudIconMixin {
                 || VOICE_CHAT_WHISPER_MICROPHONE_TEXTURE.equals(iconName)) {
             replacementPath = VOICE_CHANGER_MICROPHONE_TEXTURE;
         } else {
-            return;
+            return null;
         }
 
         try {
-            arguments.set(1, MinecraftResourceAccess.create(
+            return MinecraftResourceAccess.create(
                     icon.getClass(),
                     SvVoiceChanger.MOD_ID,
                     replacementPath
-            ));
+            );
         } catch (RuntimeException exception) {
             if (!svvoicechanger$hasLoggedIconFailure) {
                 svvoicechanger$hasLoggedIconFailure = true;
@@ -83,6 +116,7 @@ public abstract class TalkingHudIconMixin {
                         exception
                 );
             }
+            return null;
         }
     }
 }

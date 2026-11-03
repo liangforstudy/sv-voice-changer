@@ -26,4 +26,8 @@ final class Screens {
     static void screenshot(Minecraft mc, Consumer<Component> done) {
         Screenshot.grab(mc.gameDirectory, mc.getMainRenderTarget(), done);
     }
+
+    static void openWorld(Minecraft mc, String name, Runnable onCancel) {
+        mc.createWorldOpenFlows().openWorld(name, onCancel);
+    }
 }

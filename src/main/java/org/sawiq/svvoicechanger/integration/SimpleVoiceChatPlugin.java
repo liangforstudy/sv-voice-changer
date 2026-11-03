@@ -3,9 +3,14 @@ package org.sawiq.svvoicechanger.integration;
 //? if fabric {
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-//?} else {
+//?}
+//? if neoforge {
 /*import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import net.neoforged.fml.loading.FMLEnvironment;
+*///?}
+//? if forge {
+/*import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 *///?}
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.events.ClientSoundEvent;
@@ -15,7 +20,7 @@ import org.sawiq.svvoicechanger.client.VoiceChangerController;
 import org.sawiq.svvoicechanger.client.audio.SimpleVoiceChatAudioProcessor;
 import org.sawiq.svvoicechanger.client.audio.SimpleVoiceChatAudioProcessor.ProcessingResult;
 
-//? if neoforge
+//? if !fabric
 /*@ForgeVoicechatPlugin*/
 public final class SimpleVoiceChatPlugin implements VoicechatPlugin {
     private static final int AUDIO_PROCESSING_PRIORITY = 100;
@@ -49,7 +54,7 @@ public final class SimpleVoiceChatPlugin implements VoicechatPlugin {
         return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
         //?}
         // Minecraft 26's loader turned this field into an accessor.
-        //? if neoforge && <1.21.9 {
+        //? if !fabric && <1.21.9 {
         /*return FMLEnvironment.dist.isClient();
         *///?}
         //? if neoforge && >=1.21.9 {

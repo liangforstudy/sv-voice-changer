@@ -1,0 +1,55 @@
+// Launches a Minecraft Forge 1.20.1 client with the jars under test. Forge of
+// this era runs under SRG names in production but Mojang names in a dev
+// client, so the jars are put on the run as remapped mod dependencies rather
+// than dropped into mods/; the remapping is the same one the release jar went
+// through in reverse. See ../README.md.
+plugins {
+    id 'net.neoforged.moddev.legacyforge' version '2.0.147'
+}
+
+def forgeVersion = project.property('forge')
+
+layout.buildDirectory = file("build/${forgeVersion}")
+
+sourceSets.main {
+    java.srcDirs = ['../probe/src/main/java', '../probe/src/legacy/java', '../probe/src/forge/java']
+    resources.srcDirs = ['../probe/src/forge/resources']
+}
+
+def modsDir = file(project.property('modsDir'))
+
+repositories {
+    mavenCentral()
+    // The remapping only applies to module dependencies, so the folder is
+    // served as a repository rather than as plain files.
+    flatDir { dirs modsDir }
+}
+
+dependencies {
+    modsDir.listFiles().findAll { it.name.endsWith('.jar') }.each { jar ->
+        modRuntimeOnly([group: 'runtime-check', name: jar.name - '.jar', version: ''])
+    }
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+legacyForge {
+    version = forgeVersion
+    runs {
+        client {
+            client()
+            gameDirectory = file(project.property('gameDir'))
+            systemProperty 'probe.target', project.property('target')
+            jvmArguments.add('-Xmx3G')
+        }
+    }
+    mods {
+        runtime_check_probe {
+            sourceSet sourceSets.main
+        }
+    }
+}

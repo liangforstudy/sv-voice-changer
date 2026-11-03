@@ -38,6 +38,7 @@ NEOFORGE = {
     "1.21.8": "21.8.54", "1.21.9": "21.9.16-beta", "1.21.10": "21.10.64", "1.21.11": "21.11.44",
     "26.1.2": "26.1.2.82", "26.2": "26.2.0.23-beta", "26.3": "26.3.0.7-beta",
 }
+FORGE = {"1.20.1": "1.20.1-47.4.10"}
 GAME_OPTIONS = ("onboardAccessibility:false\npauseOnLostFocus:false\nsoundCategory_music:0.0\n"
                 "tutorialStep:none\nnarrator:0\n")
 CASE_TIMEOUT_SECONDS = 20 * 60
@@ -222,6 +223,12 @@ def attempt_case(case):
                           for j in runtime_mods if os.path.basename(j).startswith("fabric-api-"))
         task = ["runProbe", f"-Pmc={mc}", f"-PfabricApi={fabric_api}",
                 f"-PfabricLoader={latest_fabric_loader()}", f"-PmodsDir={mods_dir}"]
+    elif loader == "forge":
+        # Remapped into the dev client by the Gradle project, not read from mods/.
+        mods_dir = os.path.join(WORK, "cases", case["name"])
+        shutil.rmtree(mods_dir, ignore_errors=True)
+        os.makedirs(mods_dir)
+        task = ["runClient", f"-Pforge={FORGE[mc]}", f"-PmodsDir={mods_dir}"]
     else:
         mods_dir = os.path.join(game_dir, "mods")
         os.makedirs(mods_dir)

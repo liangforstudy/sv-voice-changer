@@ -16,6 +16,9 @@ import net.fabricmc.loader.api.FabricLoader;
 //? if neoforge {
 /*import net.neoforged.fml.ModList;
 *///?}
+//? if forge {
+/*import net.minecraftforge.fml.ModList;
+*///?}
 import org.sawiq.svvoicechanger.SvVoiceChanger;
 
 public final class ModrinthVersionChecker {
@@ -120,7 +123,7 @@ public final class ModrinthVersionChecker {
                 .map(container -> container.getMetadata().getVersion().getFriendlyString())
                 .orElse("unknown");
         //?}
-        //? if neoforge {
+        //? if !fabric {
         /*return ModList.get()
                 .getModContainerById(SvVoiceChanger.NEOFORGE_MOD_ID)
                 .map(container -> container.getModInfo().getVersion().toString())
@@ -135,7 +138,7 @@ public final class ModrinthVersionChecker {
                 .map(container -> container.getMetadata().getVersion().getFriendlyString())
                 .orElse("unknown");
         //?}
-        //? if neoforge {
+        //? if !fabric {
         /*return ModList.get()
                 .getModContainerById("minecraft")
                 .map(container -> container.getModInfo().getVersion().toString())
@@ -149,6 +152,9 @@ public final class ModrinthVersionChecker {
         //?}
         //? if neoforge {
         /*return "neoforge";
+        *///?}
+        //? if forge {
+        /*return "forge";
         *///?}
     }
 

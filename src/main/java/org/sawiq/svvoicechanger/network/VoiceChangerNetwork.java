@@ -4,10 +4,24 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import net.minecraft.server.level.ServerPlayer;
 
-//? if fabric {
+//? if fabric && >=1.21 {
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-//?} else {
+//?}
+//? if fabric && <1.21 {
+/*import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+*///?}
+//? if forge {
+/*import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.event.EventNetworkChannel;
+*///?}
+//? if neoforge {
 /*import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -42,7 +56,7 @@ public final class VoiceChangerNetwork {
     public static void initialize() {
         // Minecraft 26 renamed these two accessors; nothing else about the
         // Fabric networking API moved.
-        //? if fabric && <26.1 {
+        //? if fabric && >=1.21 && <26.1 {
         PayloadTypeRegistry.playS2C().register(VoiceChangerPayload.TYPE, VoiceChangerPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(VoiceChangerPayload.TYPE, VoiceChangerPayload.CODEC);
         //?}
@@ -51,7 +65,7 @@ public final class VoiceChangerNetwork {
         PayloadTypeRegistry.serverboundPlay().register(VoiceChangerPayload.TYPE, VoiceChangerPayload.CODEC);
         *///?}
 
-        //? if fabric {
+        //? if fabric && >=1.21 {
         ServerPlayNetworking.registerGlobalReceiver(VoiceChangerPayload.TYPE, (payload, context) -> {
             byte[] data = payload.data();
             ServerPlayer player = context.player();
@@ -59,11 +73,67 @@ public final class VoiceChangerNetwork {
             // server state and the player list.
             context.server().execute(() -> deliverToServer(player, data));
         });
-        //?} else {
+        //?}
+        //? if fabric && <1.21 {
+        /*// Fabric API on 1.20.1 hands over the raw buffer, which is released
+        // as soon as this returns, so the bytes are copied out here.
+        ServerPlayNetworking.registerGlobalReceiver(VoiceChangerPayload.ID,
+                (server, player, handler, buffer, responseSender) -> {
+                    byte[] data = VoiceChangerPayload.read(buffer).data();
+                    server.execute(() -> deliverToServer(player, data));
+                });
+        *///?}
+        //? if forge {
+        /*// An event channel rather than a SimpleChannel: it puts the bytes on
+        // the wire as they are, with no discriminator in front, so a Forge
+        // side and a Fabric side still understand each other. Every version
+        // string is accepted, which makes the channel optional both ways.
+        CHANNEL = NetworkRegistry.ChannelBuilder.named(VoiceChangerPayload.ID)
+                .networkProtocolVersion(() -> PROTOCOL_VERSION)
+                .clientAcceptedVersions(version -> true)
+                .serverAcceptedVersions(version -> true)
+                .eventNetworkChannel();
+        CHANNEL.addListener(VoiceChangerNetwork::onServerPayload);
+        CHANNEL.addListener(VoiceChangerNetwork::onClientPayload);
+        *///?}
+        //? if neoforge {
         /*// NeoForge collects payload handlers in an event instead; see
         // registerPayloads, which the mod entrypoint subscribes.
         *///?}
     }
+
+    //? if forge {
+    /*private static final String PROTOCOL_VERSION = "1";
+    private static EventNetworkChannel CHANNEL;
+
+    private static void onServerPayload(NetworkEvent.ClientCustomPayloadEvent event) {
+        NetworkEvent.Context context = event.getSource().get();
+        ServerPlayer player = context.getSender();
+        if (player == null || event.getPayload() == null) {
+            return;
+        }
+
+        byte[] data = VoiceChangerPayload.read(event.getPayload()).data();
+        context.enqueueWork(() -> deliverToServer(player, data));
+        context.setPacketHandled(true);
+    }
+
+    private static void onClientPayload(NetworkEvent.ServerCustomPayloadEvent event) {
+        NetworkEvent.Context context = event.getSource().get();
+        if (context.getDirection() != NetworkDirection.PLAY_TO_CLIENT || event.getPayload() == null) {
+            return;
+        }
+
+        byte[] data = VoiceChangerPayload.read(event.getPayload()).data();
+        context.enqueueWork(() -> deliverToClient(data));
+        context.setPacketHandled(true);
+    }
+
+    /^* Whether the other end of this connection registered the channel. ^/
+    public static boolean isRemotePresent(net.minecraft.network.Connection connection) {
+        return CHANNEL != null && connection != null && CHANNEL.isRemotePresent(connection);
+    }
+    *///?}
 
     //? if neoforge && <26.1 {
     /*/^*
@@ -174,9 +244,18 @@ public final class VoiceChangerNetwork {
             return false;
         }
 
-        //? if fabric {
+        //? if fabric && >=1.21 {
         ServerPlayNetworking.send(player, new VoiceChangerPayload(data));
-        //?} else {
+        //?}
+        //? if fabric && <1.21 {
+        /*ServerPlayNetworking.send(player, VoiceChangerPayload.ID,
+                new VoiceChangerPayload(data).write(PacketByteBufs.create()));
+        *///?}
+        //? if forge {
+        /*player.connection.send(new ClientboundCustomPayloadPacket(VoiceChangerPayload.ID,
+                new VoiceChangerPayload(data).write(new FriendlyByteBuf(Unpooled.buffer()))));
+        *///?}
+        //? if neoforge {
         /*PacketDistributor.sendToPlayer(player, new VoiceChangerPayload(data));
         *///?}
         return true;
@@ -184,9 +263,16 @@ public final class VoiceChangerNetwork {
 
     /** Whether this player's client speaks our channel. */
     public static boolean canSendTo(ServerPlayer player) {
-        //? if fabric {
+        //? if fabric && >=1.21 {
         return ServerPlayNetworking.canSend(player, VoiceChangerPayload.TYPE);
-        //?} else {
+        //?}
+        //? if fabric && <1.21 {
+        /*return ServerPlayNetworking.canSend(player, VoiceChangerPayload.ID);
+        *///?}
+        //? if forge {
+        /*return isRemotePresent(player.connection.connection);
+        *///?}
+        //? if neoforge {
         /*return NetworkRegistry.hasChannel(player.connection, VoiceChangerPayload.TYPE.id());
         *///?}
     }

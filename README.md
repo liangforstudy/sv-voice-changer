@@ -3,7 +3,7 @@
 
 # EN
 
-**Fabric and NeoForge** addon for **Simple Voice Chat**. It processes outgoing microphone audio in real time and adds a native-looking Voice Changer Studio to the Simple Voice Chat menu. The voice is changed on your own client; install it on the server as well to set a policy for everyone and to hand out your own voices.
+**Fabric, NeoForge and Forge (1.20.1)** addon for **Simple Voice Chat**. It processes outgoing microphone audio in real time and adds a native-looking Voice Changer Studio to the Simple Voice Chat menu. The voice is changed on your own client; install it on the server as well to set a policy for everyone and to hand out your own voices.
 
 ### ✨ Features
 
@@ -25,6 +25,7 @@
 - **Simple Voice Chat** for the installed Minecraft version — required.
 - **Fabric API** — required only for Fabric builds.
 - **NeoForge** — required only for NeoForge builds.
+- **Forge** 47 or later — required only for the Minecraft 1.20.1 Forge build.
 
 ### ✅ Simple Voice Chat compatibility
 
@@ -32,6 +33,7 @@ Use the Simple Voice Chat file made for your exact Minecraft version. The table 
 
 | Minecraft | Minimum Simple Voice Chat |
 |---|---:|
+| 1.20.1 | 2.5.15 |
 | 1.21 | 2.5.15 |
 | 1.21.1 | 2.5.20 |
 | 1.21.2 | 2.5.24 |
@@ -83,7 +85,7 @@ Worth being clear first: the voice is changed on the speaker's own machine befor
 
 **Restrictions** - `all` lets players tune freely. `presets` allows ready-made voices only: built-in, added by another mod, or shared by this server; no hand tuning and no personal preset files. `server-only` allows nothing but the voices this server shares. A voice another mod is holding, such as a radio, is never affected.
 
-**Permissions** - on NeoForge, `sv-voice-changer:use` decides who may change their voice and `sv-voice-changer:command` who may run the command, so any permission manager can pick them up. Fabric has no equivalent permission API, so nobody is refused on that ground there and the mute list is what a moderator uses instead.
+**Permissions** - on NeoForge and Forge, `sv-voice-changer:use` decides who may change their voice and `sv-voice-changer:command` who may run the command, so any permission manager can pick them up. Fabric has no equivalent permission API, so nobody is refused on that ground there and the mute list is what a moderator uses instead.
 
 **Sharing your own voices** - save a voice in the studio, press **Open Folder**, copy the file into `config/sv-voice-changer/shared-voices/` on the server, then run `/svvoicechanger reload`. It appears in every connected player's studio and disappears when they leave. Only numbers are read from those files and every value is clamped to its own range, so this cannot make a client load or run anything.
 

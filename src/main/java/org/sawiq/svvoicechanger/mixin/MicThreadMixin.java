@@ -73,7 +73,13 @@ public abstract class MicThreadMixin {
             return;
         }
 
+        //? if >=1.21 {
         long currentThreadId = Thread.currentThread().threadId();
+        //?} else {
+        /*// Java 17, which 1.20.1 runs on, has only the older accessor.
+        @SuppressWarnings("deprecation")
+        long currentThreadId = Thread.currentThread().getId();
+        *///?}
         if (activeMicTestThreadId != currentThreadId) {
             MIC_TEST_PROCESSOR.reset();
             activeMicTestThreadId = currentThreadId;

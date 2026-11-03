@@ -5,7 +5,14 @@ plugins {
 version = "${property("mod.version")}+${sc.current.version}"
 base.archivesName = "sv-voice-changer-fabric"
 
-val requiredJava = if (sc.current.parsed >= "26.1") JavaVersion.VERSION_25 else JavaVersion.VERSION_21
+val requiredJava = when {
+    sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
+    sc.current.parsed >= "1.20.5" -> JavaVersion.VERSION_21
+    else -> JavaVersion.VERSION_17
+}
+// Minecraft 1.20.1 targets Java 17, which any newer JDK can emit with --release,
+// so it is built with the same JDK as the 1.21 targets.
+val toolchainJava = if (requiredJava < JavaVersion.VERSION_21) JavaVersion.VERSION_21 else requiredJava
 
 repositories {
     mavenCentral()
@@ -47,7 +54,7 @@ java {
     withSourcesJar()
     sourceCompatibility = requiredJava
     targetCompatibility = requiredJava
-    toolchain.languageVersion = JavaLanguageVersion.of(requiredJava.majorVersion)
+    toolchain.languageVersion = JavaLanguageVersion.of(toolchainJava.majorVersion)
 }
 
 tasks {
@@ -69,7 +76,7 @@ tasks {
         inputs.properties(props)
         filesMatching("fabric.mod.json") { expand(props) }
         filesMatching("*.mixins.json") { expand("java" to "JAVA_${requiredJava.majorVersion}") }
-        exclude("META-INF/neoforge.mods.toml")
+        exclude("META-INF/neoforge.mods.toml", "META-INF/mods.toml", "pack.mcmeta")
     }
 
     jar {

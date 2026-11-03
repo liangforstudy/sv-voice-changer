@@ -7,7 +7,17 @@ import org.sawiq.svvoicechanger.network.VoiceChangerPayload;
 
 //? if fabric {
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-//?} else {
+//?}
+//? if fabric && <1.21 {
+/*import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+*///?}
+//? if forge {
+/*import io.netty.buffer.Unpooled;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
+*///?}
+//? if neoforge {
 /*import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
 *///?}
@@ -28,22 +38,40 @@ public final class ClientVoiceChannel {
      * on one side only is one neither side can use.
      */
     public static void initialize(Consumer<byte[]> receiver) {
-        //? if fabric {
+        //? if fabric && >=1.21 {
         ClientPlayNetworking.registerGlobalReceiver(VoiceChangerPayload.TYPE, (payload, context) -> {
             byte[] data = payload.data();
             // Arrives on a network thread; everything it touches is client state.
             context.client().execute(() -> receiver.accept(data));
         });
-        //?} else {
+        //?}
+        //? if fabric && <1.21 {
+        /*ClientPlayNetworking.registerGlobalReceiver(VoiceChangerPayload.ID,
+                (client, handler, buffer, responseSender) -> {
+                    // The buffer is released once this returns, so copy first.
+                    byte[] data = VoiceChangerPayload.read(buffer).data();
+                    client.execute(() -> receiver.accept(data));
+                });
+        *///?}
+        //? if !fabric {
         /*VoiceChangerNetwork.setClientReceiver(receiver);
         *///?}
     }
 
     /** Whether there is a server on the other end that speaks this channel. */
     public static boolean isConnected() {
-        //? if fabric {
+        //? if fabric && >=1.21 {
         return ClientPlayNetworking.canSend(VoiceChangerPayload.TYPE);
-        //?} else {
+        //?}
+        //? if fabric && <1.21 {
+        /*return ClientPlayNetworking.canSend(VoiceChangerPayload.ID);
+        *///?}
+        //? if forge {
+        /*Minecraft client = Minecraft.getInstance();
+        return client.getConnection() != null
+                && VoiceChangerNetwork.isRemotePresent(client.getConnection().getConnection());
+        *///?}
+        //? if neoforge {
         /*Minecraft client = Minecraft.getInstance();
         return client.getConnection() != null
                 && NetworkRegistry.hasChannel(client.getConnection(), VoiceChangerPayload.TYPE.id());
@@ -57,9 +85,18 @@ public final class ClientVoiceChannel {
         }
 
         try {
-            //? if fabric {
+            //? if fabric && >=1.21 {
             ClientPlayNetworking.send(new VoiceChangerPayload(payload));
             //?}
+            //? if fabric && <1.21 {
+            /*ClientPlayNetworking.send(VoiceChangerPayload.ID,
+                    new VoiceChangerPayload(payload).write(PacketByteBufs.create()));
+            *///?}
+            //? if forge {
+            /*Minecraft.getInstance().getConnection().send(new ServerboundCustomPayloadPacket(
+                    VoiceChangerPayload.ID,
+                    new VoiceChangerPayload(payload).write(new FriendlyByteBuf(Unpooled.buffer()))));
+            *///?}
             //? if neoforge {
             /*sendToServer(new VoiceChangerPayload(payload));
             *///?}

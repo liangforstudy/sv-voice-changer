@@ -12,7 +12,7 @@ stonecutter parameters {
     }
 
     constants {
-        match(loader, "fabric", "neoforge")
+        match(loader, "fabric", "neoforge", "forge")
     }
 
     replacements {

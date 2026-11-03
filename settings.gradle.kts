@@ -23,6 +23,10 @@ stonecutter {
             version("$project-neoforge", version).buildscript("build.neoforge.gradle.kts")
         }
 
+        // Before NeoForge, so Minecraft Forge instead.
+        version("1.20.1-fabric", "1.20.1").buildscript("build.fabric.gradle.kts")
+        version("1.20.1-forge", "1.20.1").buildscript("build.forge.gradle.kts")
+
         target("1.21.1")
         target("1.21.2")
         target("1.21.3")

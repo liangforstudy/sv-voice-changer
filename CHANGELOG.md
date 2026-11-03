@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### EN
+
+#### Added
+- **Minecraft 1.20.1**, for Fabric and for Minecraft Forge (47 or later), with
+  every feature of 1.3.0: the studio and presets, the AI voice and training,
+  self-listen, the API, the talking icon, and the server policy, commands,
+  shared voices and permission nodes. On the wire it is the same channel as
+  every other build, so 1.20.1 clients and servers on either loader understand
+  each other.
+
 ## 1.3.0
 
 ### EN

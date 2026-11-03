@@ -24,6 +24,11 @@ public abstract class CompatScreen extends Screen {
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
     //?}
         StudioGraphics graphics = new StudioGraphics(context, this.font);
+        //? if <1.21 {
+        /*// Up to 1.20.1 a screen draws its own background; later versions do it
+        // inside super.render.
+        this.renderBackground(context);
+        *///?}
         paintBehindWidgets(graphics);
         //? if >=26.1 {
         /*super.extractRenderState(context, mouseX, mouseY, delta);
@@ -44,6 +49,22 @@ public abstract class CompatScreen extends Screen {
         return onKeyPressed(keyCode) || super.keyPressed(keyCode, scanCode, modifiers);
     }
     //?}
+
+    //? if <1.21 {
+    /*/^*
+     * Minecraft 1.20.1 reports a single scroll amount. Turned into the
+     * two-axis form later versions use, so the screens override one method on
+     * every version; the default hands it back to the vanilla handler.
+     ^/
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        return mouseScrolled(mouseX, mouseY, 0.0, amount);
+    }
+
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        return super.mouseScrolled(mouseX, mouseY, verticalAmount);
+    }
+    *///?}
 
     /** Drawn before the widgets: backdrops, panels, section headings. */
     protected void paintBehindWidgets(StudioGraphics graphics) {

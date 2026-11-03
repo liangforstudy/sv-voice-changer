@@ -64,6 +64,16 @@ public final class UpdateAvailableScreen extends Screen {
                 .build());
     }
 
+    //? if <1.21 {
+    /*// Up to 1.20.1 a screen draws its own background; later versions do it
+    // inside super.render.
+    @Override
+    public void render(net.minecraft.client.gui.GuiGraphics context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
+    }
+    *///?}
+
     @Override
     public void onClose() {
         if (this.minecraft == null) {

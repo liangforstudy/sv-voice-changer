@@ -41,7 +41,13 @@ public abstract class VoiceChatScreenMixin extends Screen {
         super(title);
     }
 
+    //? if forge {
+    /*// Forge 1.20.1 has no refmap for this mod, and Simple Voice Chat's
+    // override of Screen.init keeps its SRG name outside the dev environment.
+    @Inject(method = {"init", "m_7856_"}, at = @At("TAIL"), require = 0)
+    *///?} else {
     @Inject(method = "init", at = @At("TAIL"), require = 0)
+    //?}
     private void svvoicechanger$addStudioButton(CallbackInfo callbackInfo) {
         try {
             VoiceChatScreenBase voiceChatScreen = (VoiceChatScreenBase) (Object) this;

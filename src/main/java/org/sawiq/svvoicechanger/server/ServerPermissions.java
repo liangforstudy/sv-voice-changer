@@ -16,11 +16,21 @@ import net.neoforged.neoforge.server.permission.nodes.PermissionNode;
 import net.neoforged.neoforge.server.permission.nodes.PermissionTypes;
 import org.sawiq.svvoicechanger.SvVoiceChanger;
 *///?}
+//? if forge {
+/*import java.util.List;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.server.permission.PermissionAPI;
+import net.minecraftforge.server.permission.events.PermissionGatherEvent;
+import net.minecraftforge.server.permission.nodes.PermissionNode;
+import net.minecraftforge.server.permission.nodes.PermissionTypes;
+import org.sawiq.svvoicechanger.SvVoiceChanger;
+*///?}
 
 /**
  * Who may change their voice, and who may run the command.
  *
- * <p>NeoForge ships a permission API that any permission manager plugs into, so
+ * <p>NeoForge and Forge ship a permission API that any permission manager plugs into, so
  * there both questions are real permission nodes. Fabric has no equivalent in
  * the loader or in Fabric API, and the community library that fills the gap is
  * not a dependency this mod takes, so there the command falls back to the
@@ -50,10 +60,24 @@ public final class ServerPermissions {
             (player, playerId, context) -> false);
     *///?}
 
+    //? if forge {
+    /*/^* Granted to everyone; a manager can take it away. ^/
+    public static final PermissionNode<Boolean> USE = new PermissionNode<>(
+            new ResourceLocation(SvVoiceChanger.MOD_ID, "use"),
+            PermissionTypes.BOOLEAN,
+            (player, playerId, context) -> true);
+
+    /^* Granted to nobody by default; operators already pass the fallback check. ^/
+    public static final PermissionNode<Boolean> COMMAND = new PermissionNode<>(
+            new ResourceLocation(SvVoiceChanger.MOD_ID, "command"),
+            PermissionTypes.BOOLEAN,
+            (player, playerId, context) -> false);
+    *///?}
+
     private ServerPermissions() {
     }
 
-    //? if neoforge {
+    //? if !fabric {
     /*/^* Subscribed by the common entrypoint so managers can see the nodes. ^/
     public static void gather(PermissionGatherEvent.Nodes event) {
         USE.setInformation(
@@ -68,7 +92,7 @@ public final class ServerPermissions {
 
     /** Whether this player may change their voice at all. */
     public static boolean canUse(ServerPlayer player) {
-        //? if neoforge {
+        //? if !fabric {
         /*return PermissionAPI.getPermission(player, USE);
         *///?} else {
         // No permission API on Fabric, so nobody is refused on this ground and
@@ -79,7 +103,7 @@ public final class ServerPermissions {
 
     /** Whether this source may run the moderation command. */
     public static boolean canCommand(CommandSourceStack source) {
-        //? if neoforge {
+        //? if !fabric {
         /*ServerPlayer player = source.getPlayer();
         if (player != null && PermissionAPI.getPermission(player, COMMAND)) {
             return true;

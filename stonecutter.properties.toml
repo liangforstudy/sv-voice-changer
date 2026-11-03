@@ -9,6 +9,22 @@ deps.fabric_loader = "0.19.3"
 deps.voicechat_api = "2.5.0"
 loomx.loom_version = "1.17-SNAPSHOT"
 
+["1.20.1"]
+mod.mc_releases = ["1.20.1"]
+
+[fabric."1.20.1"]
+mod.mc_compat = "1.20.1"
+deps.voicechat_compat = ">=1.20.1-2.5.15"
+deps.fabric_api = "0.92.6+1.20.1"
+deps.voicechat = "fabric-1.20.1-2.6.21"
+
+[forge."1.20.1"]
+mod.mc_compat = "[1.20.1]"
+deps.voicechat_compat = "[1.20.1-2.5.15,)"
+deps.forge_loader = "1.20.1-47.4.10"
+deps.forge_compat = "[47,)"
+deps.voicechat = "forge-1.20.1-2.6.21"
+
 ["1.21.1"]
 mod.mc_releases = ["1.21", "1.21.1"]
 
