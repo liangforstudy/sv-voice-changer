@@ -13,7 +13,7 @@ import org.sawiq.svvoicechanger.server.VoiceChangerServerRuntime;
  * The common entrypoint: it runs on a dedicated server and on the integrated
  * one, so a world opened to LAN gets the same policy as a real server.
  *
- * <p>The packet type is declared here rather than on the client, because a
+ * <p>The channel is set up here rather than on the client, because a
  * payload registered on one side only is one neither side can use.</p>
  */
 public final class SvVoiceChangerFabricMain implements ModInitializer {

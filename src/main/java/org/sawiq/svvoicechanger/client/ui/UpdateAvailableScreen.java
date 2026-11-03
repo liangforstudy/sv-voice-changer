@@ -8,7 +8,7 @@ import org.sawiq.svvoicechanger.client.MinecraftScreenAccess;
 
 /**
  * Lightweight update prompt shown once on the title screen.
- * Uses only widgets so it stays compatible across 1.21.x / 26.x and both loaders.
+ * Uses only widgets so it stays compatible across 1.20.1 / 1.21.x / 26.x and every loader.
  */
 public final class UpdateAvailableScreen extends Screen {
     private final Screen parent;

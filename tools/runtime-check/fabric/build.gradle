@@ -1,4 +1,4 @@
-// Launches a production Fabric client for Minecraft 1.21.x: the game under
+// Launches a production Fabric client for Minecraft 1.20.1 and 1.21.x: the game under
 // intermediary names, mods loaded from jars, exactly as a player runs it.
 // check.py passes everything version-specific; see ../README.md.
 plugins {
