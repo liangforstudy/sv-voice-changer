@@ -34,7 +34,7 @@ The jars are written to `dist/`. The upstream 1.21 and 26.x targets are still in
 
 ## Who was this build for?
 
-It was for a Reddit post, but I could no longer find it.
+https://www.reddit.com/r/MinecraftMod/s/7x42gaAqwU
 
 ## License
 
