@@ -19,6 +19,11 @@ It is based on upstream version 1.3.0 and has every feature of that release. For
 
 The jars are written to `dist/`. The upstream 1.21 and 26.x targets are still in the build and are unchanged.
 
+## Who was this build for?
+
+It was for a reddit post, but I could no longer find it
+
+
 ## License
 
 CC BY-NC-SA 4.0, the same as upstream. The original mod is by sawiq_.
